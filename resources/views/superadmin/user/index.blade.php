@@ -1,0 +1,1 @@
+@livewire('superadmin.user.index')
