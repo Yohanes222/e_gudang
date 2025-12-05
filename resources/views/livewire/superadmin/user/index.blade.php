@@ -7,7 +7,7 @@
                     <div class="col-sm-6">
                         <h1>
                             <i class="fas fa-user mr-2"></i>
-                            @yield('title')
+                            {{ $title }}
                         </h1>
                     </div>
                     <div class="col-sm-6">
@@ -20,7 +20,7 @@
                             </li>
                             <li class="breadcrumb-item active">
                                 <i class="fas fa-user"></i>
-                                @yield('title')
+                            {{ $title }}
                             </li>
                         </ol>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-sm btn-primary">
+                            <button wire:click="create" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">
                                 <i class="fas fa-plus mr-1"></i>
                                 Tambah Data
                             </button>
@@ -63,12 +63,73 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    body
+                    <div class="mb-2 d-flex justify-content-between">
+                        <div class="col-1">
+                            <select wire:model.live="paginate" class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+
+                        <div>       
+                            <input wire:model.live="search" type="text" class="form-control" placeholder="Cari">
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>
+                                        <i class="fas fa-cog"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($user as $item)
+                                    <tr>
+                                        <td>{{ $user->firstItem() + $loop->index }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->email }}</td>
+                                        @if ($item->role == 'Super Admin')
+                                            <td>
+                                                <span class="badge badge-primary">
+                                                    {{ $item->role }}
+                                                </span>
+                                            </td>
+                                        @elseif ($item->role == 'Admin')
+                                            <td>
+                                                <span class="badge badge-info">
+                                                    {{ $item->role }}
+                                                </span>
+                                            </td>
+                                        @endif
+                                        <td>
+                                            <button class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $user->links() }}
+                    </div>
                 </div>
             </div>
-            <!-- /.card -->
 
         </section>
-        <!-- /.content -->
+        {{-- create Modal --}}
+        @include('livewire.superadmin.user.create')
+        {{-- create Modal --}}
     </div>
 </div>
