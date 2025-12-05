@@ -7,7 +7,7 @@
                     <div class="col-sm-6">
                         <h1>
                             <i class="fas fa-list mr-2"></i>
-                            @yield('title')
+                            {{ $title }}
                         </h1>
                     </div>
                     <div class="col-sm-6">
@@ -20,7 +20,7 @@
                             </li>
                             <li class="breadcrumb-item active">
                                 <i class="fas fa-list"></i>
-                                @yield('title')
+                                {{ $title }}
                             </li>
                         </ol>
                     </div>
@@ -36,7 +36,8 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-sm btn-primary">
+                            <button wire:click="create" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#createModal">
                                 <i class="fas fa-plus mr-1"></i>
                                 Tambah Data
                             </button>
@@ -63,12 +64,115 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    Data kategori
+                    <div class="mb-2 d-flex justify-content-between">
+                        <div class="col-1">
+                            <select wire:model.live="paginate" class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <input wire:model.live="search" type="text" class="form-control" placeholder="Cari">
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Kategori</th>
+                                    <th>
+                                        <i class="fas fa-cog"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($kategori as $item)
+                                    <tr>
+                                        <td>{{ $kategori->firstItem() + $loop->index }}</td>
+                                        <td>{{ $item->nama_kategori }}</td>
+                                        <td>
+                                            <button wire:click="edit({{ $item->id }})"
+                                                class="btn btn-sm btn-warning" data-toggle="modal"
+                                                data-target="#editModal">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button wire:click="confirm({{ $item->id }})"
+                                                class="btn btn-sm btn-danger" data-toggle="modal"
+                                                data-target="#deleteModal">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $kategori->links() }}
+                    </div>
                 </div>
             </div>
-            <!-- /.card -->
 
         </section>
-        <!-- /.content -->
+        {{-- create Modal --}}
+        @include('livewire.superadmin.kategori.create')
+        {{-- create Modal --}}
+
+        {{-- Close Create Modal --}}
+        @script
+            <script>
+                $wire.on('closeCreateModal', () => {
+                    $('#createModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil ditambah",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Create Modal --}}
+
+        {{-- edit Modal --}}
+        @include('livewire.superadmin.kategori.edit')
+        {{-- edit Modal --}}
+
+        {{-- Close Edit Modal --}}
+        @script
+            <script>
+                $wire.on('closeEditModal', () => {
+                    $('#editModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil diedit",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Edit Modal --}}
+
+        {{-- Delete Modal --}}
+        @include('livewire.superadmin.kategori.delete')
+        {{-- Delete Modal --}}
+
+        {{-- Close Delete Modal --}}
+        @script
+            <script>
+                $wire.on('closeDeleteModal', () => {
+                    $('#deleteModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil dihapus",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Delete Modal --}}
+
     </div>
 </div>

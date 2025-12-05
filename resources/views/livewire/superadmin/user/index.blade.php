@@ -20,7 +20,7 @@
                             </li>
                             <li class="breadcrumb-item active">
                                 <i class="fas fa-user"></i>
-                            {{ $title }}
+                                {{ $title }}
                             </li>
                         </ol>
                     </div>
@@ -36,7 +36,8 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button wire:click="create" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">
+                            <button wire:click="create" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#createModal">
                                 <i class="fas fa-plus mr-1"></i>
                                 Tambah Data
                             </button>
@@ -73,7 +74,7 @@
                             </select>
                         </div>
 
-                        <div>       
+                        <div>
                             <input wire:model.live="search" type="text" class="form-control" placeholder="Cari">
                         </div>
 
@@ -111,10 +112,14 @@
                                             </td>
                                         @endif
                                         <td>
-                                            <button class="btn btn-sm btn-warning">
+                                            <button wire:click="edit({{ $item->id }})"
+                                                class="btn btn-sm btn-warning" data-toggle="modal"
+                                                data-target="#editModal">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-danger">
+                                            <button wire:click="confirm({{ $item->id }})"
+                                                class="btn btn-sm btn-danger" data-toggle="modal"
+                                                data-target="#deleteModal">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
@@ -131,5 +136,59 @@
         {{-- create Modal --}}
         @include('livewire.superadmin.user.create')
         {{-- create Modal --}}
+
+        {{-- Close Create Modal --}}
+        @script
+            <script>
+                $wire.on('closeCreateModal', () => {
+                    $('#createModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil ditambah",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Create Modal --}}
+
+        {{-- edit Modal --}}
+        @include('livewire.superadmin.user.edit')
+        {{-- edit Modal --}}
+
+        {{-- Close Edit Modal --}}
+        @script
+            <script>
+                $wire.on('closeEditModal', () => {
+                    $('#editModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil diedit",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Edit Modal --}}
+
+        {{-- Delete Modal --}}
+        @include('livewire.superadmin.user.delete')
+        {{-- Delete Modal --}}
+
+        {{-- Close Delete Modal --}}
+        @script
+            <script>
+                $wire.on('closeDeleteModal', () => {
+                    $('#deleteModal').modal('hide');
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: "Data berhasil dihapus",
+                        icon: "success"
+                    });
+                });
+            </script>
+        @endscript
+        {{-- Close Delete Modal --}}
+
     </div>
 </div>
